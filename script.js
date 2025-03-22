@@ -251,8 +251,11 @@ function showGameEndPopup() {
 
 // Event listeners for popup buttons
 playAgainBtn.addEventListener('click', () => {
-    // Reset the game and refresh the page
-    window.location.reload();
+    // Just hide the popup instead of refreshing the page
+    gameEndPopup.style.display = 'none';
+    
+    // Keep the game in a "completed" state
+    // This ensures the user can still see their words but can't continue playing
 });
 
 // Start the timer
