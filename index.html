@@ -52,8 +52,10 @@
 
                 <!-- Answer Box -->
                 <div class="answer-box">
-                    <div class="word-display" id="word-display"></div>
-                    <button id="chop-button" class="wooden-button">CHOP</button>
+                    <div class="word-form-container">
+                        <div class="word-display" id="word-display"></div>
+                        <button id="chop-button" class="wooden-button chop-button">CHOP</button>
+                    </div>
                 </div>
             </div>
 
@@ -74,36 +76,38 @@
         </div>
 
         <!-- Theme Switcher -->
-        <div class="theme-switcher">
-            <h3>Game Theme</h3>
-            <div class="theme-options">
-                <button id="theme-wood" class="theme-button active" data-theme="wood">
-                    <div class="theme-preview wood-preview"></div>
-                    <span>Wood</span>
-                </button>
-                <button id="theme-forest" class="theme-button" data-theme="forest">
-                    <div class="theme-preview forest-preview"></div>
-                    <span>Forest</span>
-                </button>
-                <button id="theme-classic" class="theme-button" data-theme="classic">
-                    <div class="theme-preview classic-preview"></div>
-                    <span>Classic</span>
-                </button>
+        <div class="floating-sidebar">
+            <div class="sidebar-toggle">
+                <span class="toggle-icon">▶</span>
             </div>
-        </div>
-
-        <!-- Feedback Button -->
-        <div class="fab-container">
-            <div class="fab-main">
-              <a href="https://forms.gle/Ao3xLpSwCq6CSCm88" 
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 class="fab-button">
-                <span class="zh-label">Lapor Masalah</span>
-                <svg class="icon" viewBox="0 0 24 24">
-                  <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 12H7v-2h10v2zm0-3H7v-2h10v2zm0-3H7V6h10v2z"/>
-                </svg>
-              </a>
+            <div class="sidebar-content">
+                <a href="https://forms.gle/Ao3xLpSwCq6CSCm88" 
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="report-button">
+                  <span>Lapor Masalah</span>
+                  <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 12H7v-2h10v2zm0-3H7v-2h10v2zm0-3H7V6h10v2z"/>
+                  </svg>
+                </a>
+                
+                <div class="theme-options">
+                    <h3>Game Theme</h3>
+                    <div class="theme-buttons">
+                        <button id="theme-wood" class="theme-button active" data-theme="wood">
+                            <div class="theme-preview wood-preview"></div>
+                            <span>Wood</span>
+                        </button>
+                        <button id="theme-forest" class="theme-button" data-theme="forest">
+                            <div class="theme-preview forest-preview"></div>
+                            <span>Forest</span>
+                        </button>
+                        <button id="theme-classic" class="theme-button" data-theme="classic">
+                            <div class="theme-preview classic-preview"></div>
+                            <span>Classic</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -128,6 +132,13 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Legal/Copyright Footer -->
+        <footer class="legal-footer">
+            <div class="copyright-container">
+                <p class="copyright-text">All design and code components of this website are © 2025 JACKIE WONG SING QIE. All rights reserved.</p>
+            </div>
+        </footer>
     </div>
     
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
