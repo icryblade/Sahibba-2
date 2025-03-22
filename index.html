@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sahibba - Word Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+</head>
+<body>
+    <div class="game-wrapper">
+        <!-- Fixed Header Section -->
+        <div class="fixed-header">
+            <h1>Sahibba</h1>
+            <div class="game-info">
+                <div class="score-display" id="score-display">Score: 0</div>
+                <div class="timer" id="timer">Time: 00:00</div>
+            </div>
+        </div>
+
+        <!-- Main Container -->
+        <div class="container">
+            <div class="game-area">
+                <!-- Name Input -->
+                <div class="name-input">
+                    <input type="text" id="name-input" placeholder="Masukkan Nama" autocomplete="off">
+                    <button id="name-button" class="wooden-button">Hantar</button>
+                </div>
+                
+                <!-- Game Controls -->
+                <div class="controls">
+                    <button id="start-button" class="wooden-button">Mula</button>
+                    <select id="time-select" class="wooden-select" aria-label="Select game duration">
+                        <option value="10">30 Saat</option>
+                        <option value="300">5 Minit</option>
+                        <option value="600">10 Minit</option>
+                        <option value="900">15 Minit</option>
+                        <option value="1200">20 Minit</option>
+                        <option value="1800">30 Minit</option>
+                        <option value="2100">35 Minit</option>
+                        <option value="2400">40 Minit</option>
+                        <option value="2700">45 Minit</option>
+                    </select>
+                    <button id="refresh-button" class="wooden-button">Refresh Letters (2x)</button>
+                </div>
+
+                <!-- Game Grid - Now 6x6 -->
+                <div class="grid" id="grid"></div>
+
+                <!-- Answer Box -->
+                <div class="answer-box">
+                    <div class="word-display" id="word-display"></div>
+                    <button id="chop-button" class="wooden-button">CHOP</button>
+                </div>
+            </div>
+
+            <!-- Side Panel -->
+            <div class="side-panel">
+                <!-- Joker Cards -->
+                <div class="joker-cards">
+                    <h2>Wildcards</h2>
+                    <div class="joker-grid" id="joker-grid"></div>
+                </div>
+
+                <!-- Leaderboard -->
+                <div class="leaderboard">
+                    <h2>Senarai Perkataan</h2>
+                    <ul id="word-list"></ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theme Switcher -->
+        <div class="theme-switcher">
+            <h3>Game Theme</h3>
+            <div class="theme-options">
+                <button id="theme-wood" class="theme-button active" data-theme="wood">
+                    <div class="theme-preview wood-preview"></div>
+                    <span>Wood</span>
+                </button>
+                <button id="theme-forest" class="theme-button" data-theme="forest">
+                    <div class="theme-preview forest-preview"></div>
+                    <span>Forest</span>
+                </button>
+                <button id="theme-classic" class="theme-button" data-theme="classic">
+                    <div class="theme-preview classic-preview"></div>
+                    <span>Classic</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Feedback Button -->
+        <div class="fab-container">
+            <div class="fab-main">
+              <a href="https://forms.gle/Ao3xLpSwCq6CSCm88" 
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 class="fab-button">
+                <span class="zh-label">Lapor Masalah</span>
+                <svg class="icon" viewBox="0 0 24 24">
+                  <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 12H7v-2h10v2zm0-3H7v-2h10v2zm0-3H7V6h10v2z"/>
+                </svg>
+              </a>
+            </div>
+        </div>
+
+        <!-- Game End Popup -->
+        <div id="game-end-popup" class="game-end-popup">
+            <div class="popup-content">
+                <div class="popup-header">
+                    <div class="ribbon">
+                        <span id="game-result">GAME OVER!</span>
+                    </div>
+                </div>
+                <div class="popup-body">
+                    <div class="score-item">
+                        <span class="score-label">YOUR SCORE:</span>
+                        <span id="final-score" class="score-value">0</span>
+                    </div>
+                </div>
+                <div class="popup-footer">
+                    <button id="play-again-btn" class="popup-btn play-btn">
+                        <span class="btn-text">OK</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="./script.js"></script>
+</body>
+</html>

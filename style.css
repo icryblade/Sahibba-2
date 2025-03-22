@@ -1,0 +1,866 @@
+/* Base Styles */
+:root {
+    /* Wood Theme (Default) */
+    --wood-light: #deb887;
+    --wood-medium: #b8860b;
+    --wood-dark: #8b4513;
+    --wood-shadow: rgba(0, 0, 0, 0.2);
+    --background-color: #f5f0e6;
+    --accent-color: #6e4c1e;
+    --text-color: #3e2e1a;
+    --board-color: #9e825a;
+    --wildcard-color: #ffcc80;
+    --background-texture: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+    
+    /* Forest Theme */
+    --forest-light: #8bc34a;
+    --forest-medium: #689f38;
+    --forest-dark: #33691e;
+    --forest-shadow: rgba(0, 0, 0, 0.25);
+    --forest-background: #e8f5e9;
+    --forest-accent: #2e7d32;
+    --forest-text: #1b5e20;
+    --forest-board: #81c784;
+    --forest-wildcard: #ffee58;
+    --forest-texture: url('https://www.transparenttextures.com/patterns/green-dust-and-scratches.png');
+    
+    /* Classic Theme */
+    --classic-light: #bbdefb;
+    --classic-medium: #64b5f6;
+    --classic-dark: #1976d2;
+    --classic-shadow: rgba(25, 118, 210, 0.2);
+    --classic-background: #e3f2fd;
+    --classic-accent: #1565c0;
+    --classic-text: #0d47a1;
+    --classic-board: #90caf9;
+    --classic-wildcard: #ffca28;
+    --classic-texture: url('https://www.transparenttextures.com/patterns/subtle-white-feathers.png');
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    background-color: var(--background-color);
+    background-image: var(--background-texture);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: var(--text-color);
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.game-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header Styles */
+.fixed-header {
+    position: sticky;
+    top: 0;
+    background-color: var(--wood-dark);
+    padding: 15px 0;
+    box-shadow: 0 4px 8px var(--wood-shadow);
+    z-index: 1000;
+    text-align: center;
+    border-radius: 0 0 10px 10px;
+    border-bottom: 4px solid var(--wood-medium);
+    margin-bottom: 20px;
+}
+
+.fixed-header h1 {
+    margin: 0;
+    font-size: 2.2em;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.game-info {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.score-display, .timer {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #fff;
+    background-color: var(--wood-medium);
+    padding: 5px 15px;
+    border-radius: 20px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Container Layout */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Game Area */
+.game-area {
+    flex: 1;
+    max-width: 750px;
+    background-color: var(--board-color);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px var(--wood-shadow);
+    border: 6px solid var(--wood-dark);
+    position: relative;
+}
+
+/* Input Styles */
+.name-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.name-input input {
+    padding: 12px 15px;
+    font-size: 16px;
+    width: 200px;
+    background-color: #fff;
+    border: 2px solid var(--wood-dark);
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Styles */
+.wooden-button {
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background: linear-gradient(to bottom, var(--wood-light), var(--wood-medium));
+    color: var(--text-color);
+    border: 2px solid var(--wood-dark);
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px var(--wood-shadow);
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.wooden-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px var(--wood-shadow);
+}
+
+.wooden-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px var(--wood-shadow);
+}
+
+.wooden-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+}
+
+.wooden-button:hover::after {
+    left: 100%;
+}
+
+/* Game Controls */
+.controls {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.wooden-select {
+    padding: 12px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    background: linear-gradient(to bottom, var(--wood-light), var(--wood-medium));
+    color: var(--text-color);
+    border: 2px solid var(--wood-dark);
+    font-weight: bold;
+    box-shadow: 0 4px 6px var(--wood-shadow);
+    appearance: none;
+    padding-right: 30px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%233e2e1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
+
+/* Grid Layout */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    margin: 20px auto;
+    padding: 15px;
+    background-color: var(--board-color);
+    border-radius: 10px;
+    max-width: 550px;
+    border: 3px solid var(--wood-dark);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.grid div {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8em;
+    font-weight: bold;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--wood-light), var(--wood-medium));
+    color: var(--text-color);
+    border-radius: 8px;
+    box-shadow: 0 3px 6px var(--wood-shadow);
+    border: 2px solid var(--wood-dark);
+    text-transform: uppercase;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.grid div:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 8px var(--wood-shadow);
+}
+
+.grid div:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px var(--wood-shadow);
+}
+
+/* Vowel letter styling */
+.grid div.vowel {
+    background: linear-gradient(135deg, #d4a76a, #b8860b);
+}
+
+/* Wildcard styling */
+.grid div.wildcard {
+    background: linear-gradient(135deg, #ffcc80, #ffb74d);
+    color: #d84315;
+}
+
+/* Word Display */
+.answer-box {
+    background-color: var(--board-color);
+    padding: 20px;
+    border-radius: 10px;
+    border: 3px solid var(--wood-dark);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.word-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    min-height: 70px;
+    width: 100%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+}
+
+.word-display div {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    cursor: grab;
+    background: linear-gradient(135deg, var(--wood-light), var(--wood-medium));
+    color: var(--text-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--wood-shadow);
+    border: 2px solid var(--wood-dark);
+    text-transform: uppercase;
+    transition: transform 0.2s;
+}
+
+.word-display div:hover {
+    transform: translateY(-2px);
+}
+
+/* Side Panel */
+.side-panel {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Joker Cards */
+.joker-cards, .leaderboard {
+    background-color: var(--board-color);
+    padding: 20px;
+    border-radius: 10px;
+    border: 6px solid var(--wood-dark);
+    box-shadow: 0 6px 12px var(--wood-shadow);
+}
+
+.joker-cards h2, .leaderboard h2 {
+    color: var(--text-color);
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.joker-grid {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.joker-grid div {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--wildcard-color), #ffb74d);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 3px 6px var(--wood-shadow);
+    border: 2px solid var(--wood-dark);
+    color: #d84315;
+    transition: all 0.2s;
+}
+
+.joker-grid div:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 8px var(--wood-shadow);
+}
+
+/* Word List */
+#word-list {
+    list-style-type: none;
+    padding: 10px;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    max-height: 350px;
+    overflow-y: auto;
+    font-family: 'Poppins', sans-serif;
+}
+
+#word-list li {
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-size: 0.95em;
+    word-break: break-word;
+    position: relative;
+}
+
+#word-list li::before {
+    content: '• ';
+    color: var(--wood-dark);
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* Timer */
+.timer.blink {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Floating Action Button */
+.fab-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 999;
+}
+
+.fab-button {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    background: linear-gradient(145deg, var(--wood-dark), #503014);
+    color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: subtle-pulse 3s ease-in-out infinite;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.fab-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+    margin-left: 10px;
+}
+
+.zh-label {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+@keyframes subtle-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+/* Responsive Design */
+@media (max-width: 1100px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .side-panel {
+        width: 100%;
+        max-width: 750px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .joker-cards, .leaderboard {
+        width: 48%;
+        min-width: 280px;
+    }
+    
+    .theme-switcher {
+        margin: 20px auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .game-area {
+        width: 100%;
+    }
+
+    .fixed-header h1 {
+        font-size: 1.8em;
+    }
+
+    .score-display, .timer {
+        font-size: 1em;
+    }
+
+    .grid {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .grid div {
+        font-size: 1.3em;
+    }
+
+    .word-display div {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2em;
+    }
+
+    .wooden-button, .wooden-select {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+
+    .joker-grid div {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5em;
+    }
+
+    .side-panel {
+        flex-direction: column;
+    }
+
+    .joker-cards, .leaderboard {
+        width: 100%;
+    }
+    
+    .theme-switcher h3 {
+        font-size: 1.2em;
+    }
+    
+    .theme-preview {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .theme-button span {
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-wrapper {
+        padding: 10px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 5px;
+        padding: 8px;
+    }
+
+    .grid div {
+        font-size: 1.1em;
+    }
+
+    .controls {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .wooden-button, .wooden-select {
+        width: 100%;
+        max-width: 250px;
+    }
+
+    .fab-container {
+        bottom: 20px;
+        right: 15px;
+    }
+    
+    .fab-button {
+        padding: 10px 15px;
+        border-radius: 25px;
+    }
+    
+    .zh-label {
+        font-size: 14px;
+    }
+    
+    .icon {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .theme-options {
+        gap: 10px;
+    }
+    
+    .theme-preview {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .theme-button {
+        padding: 5px;
+    }
+}
+
+@media (max-width: 360px) {
+    .grid {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 4px;
+    }
+
+    .grid div {
+        font-size: 0.9em;
+    }
+}
+
+/* Theme Switcher */
+.theme-switcher {
+    margin: 30px 0 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
+.theme-switcher h3 {
+    color: var(--color-dark);
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.theme-options {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.theme-button {
+    background: transparent;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+    opacity: 0.7;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.theme-button:hover {
+    transform: translateY(-5px);
+    opacity: 0.9;
+}
+
+.theme-button.active {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}
+
+.theme-preview {
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+    overflow: hidden;
+}
+
+.theme-button span {
+    color: var(--color-dark);
+    font-weight: 500;
+    font-size: 1em;
+}
+
+.wood-preview {
+    background: linear-gradient(135deg, var(--wood-light), var(--wood-medium));
+    background-image: var(--background-texture);
+    background-size: 100px;
+}
+
+.forest-preview {
+    background: linear-gradient(135deg, var(--forest-light), var(--forest-medium));
+    background-image: var(--forest-texture);
+    background-size: 100px;
+}
+
+.classic-preview {
+    background: linear-gradient(135deg, var(--classic-light), var(--classic-medium));
+    background-image: var(--classic-texture);
+    background-size: 100px;
+}
+
+/* Theme Classes */
+body.theme-wood {
+    --background-color: var(--background-color);
+    --accent-color: var(--accent-color);
+    --text-color: var(--text-color);
+    --board-color: var(--board-color);
+    --wildcard-color: var(--wildcard-color);
+    --background-texture: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+}
+
+body.theme-forest {
+    --background-color: var(--forest-background);
+    --accent-color: var(--forest-accent);
+    --text-color: var(--forest-text);
+    --board-color: var(--forest-board);
+    --wildcard-color: var(--forest-wildcard);
+    --wood-light: var(--forest-light);
+    --wood-medium: var(--forest-medium);
+    --wood-dark: var(--forest-dark);
+    --wood-shadow: var(--forest-shadow);
+    --background-texture: var(--forest-texture);
+}
+
+body.theme-classic {
+    --background-color: var(--classic-background);
+    --accent-color: var(--classic-accent);
+    --text-color: var(--classic-text);
+    --board-color: var(--classic-board);
+    --wildcard-color: var(--classic-wildcard);
+    --wood-light: var(--classic-light);
+    --wood-medium: var(--classic-medium);
+    --wood-dark: var(--classic-dark);
+    --wood-shadow: var(--classic-shadow);
+    --background-texture: var(--classic-texture);
+}
+
+/* Game End Popup */
+.game-end-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.popup-content {
+    width: 280px;
+    background: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+    background-color: #9e825a;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    border: 6px solid var(--wood-dark);
+    animation: popup-appear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: scale(0.95);
+}
+
+@keyframes popup-appear {
+    from {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+    to {
+        opacity: 1;
+        transform: scale(0.95);
+    }
+}
+
+.popup-header {
+    position: relative;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ribbon {
+    width: 100%;
+    height: 50px;
+    background-color: #E53935;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.ribbon span {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+    text-transform: uppercase;
+}
+
+.popup-body {
+    padding: 15px;
+    background-color: #f5f0e6;
+    margin: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.score-label {
+    font-weight: bold;
+    color: #555;
+}
+
+.score-value {
+    font-weight: bold;
+    font-size: 20px;
+    color: #333;
+}
+
+.popup-footer {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+}
+
+.popup-btn {
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.popup-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.popup-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.play-btn {
+    width: 100px;
+    height: 50px;
+    border-radius: 30px;
+    background: linear-gradient(to bottom, #4CAF50, #2E7D32);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+}
