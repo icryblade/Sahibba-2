@@ -14,6 +14,8 @@ const chopButton = document.getElementById('chop-button');
 const refreshButton = document.getElementById('refresh-button');
 const jokerGrid = document.getElementById('joker-grid');
 const themeButtons = document.querySelectorAll('.theme-button');
+const sidebarToggle = document.querySelector('.sidebar-toggle');
+const floatingSidebar = document.querySelector('.floating-sidebar');
 
 // Game End Popup Elements
 const gameEndPopup = document.getElementById('game-end-popup');
@@ -89,6 +91,21 @@ function applyTheme(theme) {
     });
 }
 
+// Initialize sidebar functionality
+function initializeSidebar() {
+    // Toggle sidebar when the toggle button is clicked
+    sidebarToggle.addEventListener('click', () => {
+        floatingSidebar.classList.toggle('active');
+    });
+    
+    // Close sidebar when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!floatingSidebar.contains(e.target) && floatingSidebar.classList.contains('active')) {
+            floatingSidebar.classList.remove('active');
+        }
+    });
+}
+
 // Load the dictionary
 function initializeGame() {
     fetch('dictionary.json')
@@ -105,6 +122,9 @@ function initializeGame() {
     
     // Initialize theme switcher
     initializeThemeSwitcher();
+    
+    // Initialize sidebar functionality
+    initializeSidebar();
 }
 
 // Generate letters with vowel control, adjusted frequencies, and wildcard
