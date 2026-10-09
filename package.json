@@ -4,6 +4,7 @@
   "description": "Sahibba Klasik Moden - Permainan Silang Kata Digital Bahasa Melayu",
   "main": "server.js",
   "scripts": {
+    "build": "mkdir -p dist && cp index.html style.css script.js dictionary.json edisi_keempat.json dbp_lengkap.json dist/",
     "start": "node server.js",
     "serve": "python3 -m http.server 3000"
   },
