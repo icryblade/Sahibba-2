@@ -1,147 +1,971 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sahibba</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sahibba - Permainan Silang Kata Digital Bahasa Melayu</title>
+  <meta name="description" content="Sahibba Klasik Moden: Permainan silang kata digital Bahasa Melayu dengan pengesahan Kamus Dewan DBP secara masa nyata, jubin 3D tactile, dan mod perlawanan interaktif." />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  
+  <!-- SortableJS for Drag and Drop -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#006194",
+            "primary-container": "#007bb9",
+            "on-primary": "#ffffff",
+            "primary-fixed": "#cce5ff",
+            "primary-fixed-dim": "#93ccff",
+            "secondary": "#006591",
+            "secondary-container": "#39b8fd",
+            "on-secondary": "#ffffff",
+            "secondary-fixed": "#c9e6ff",
+            "secondary-fixed-dim": "#89ceff",
+            "surface": "#f8f9ff",
+            "surface-dim": "#cbdbf5",
+            "surface-bright": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eff4ff",
+            "surface-container": "#e5eeff",
+            "surface-container-high": "#dce9ff",
+            "surface-container-highest": "#d3e4fe",
+            "on-surface": "#0b1c30",
+            "on-surface-variant": "#3f4850",
+            "outline": "#707881",
+            "outline-variant": "#bfc7d2",
+            "tertiary": "#6b38d4",
+            "tertiary-container": "#8455ef",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed": "#e9ddff",
+            "tertiary-fixed-dim": "#d0bcff",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "inverse-surface": "#213145",
+            "inverse-on-surface": "#eaf1ff"
+          },
+          fontFamily: {
+            "display-hero": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+            "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "body-md": ["Plus Jakarta Sans", "sans-serif"],
+            "label-md": ["Inter", "sans-serif"],
+            "label-caps": ["Inter", "sans-serif"],
+            "tile-letter": ["Plus Jakarta Sans", "sans-serif"],
+            "tile-score": ["Inter", "sans-serif"],
+            "timer-display": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          fontSize: {
+            "tile-score": ["10px", { lineHeight: "10px", letterSpacing: "0.02em", fontWeight: "700" }],
+            "tile-letter": ["22px", { lineHeight: "24px", letterSpacing: "0em", fontWeight: "800" }],
+            "tile-letter-lg": ["28px", { lineHeight: "30px", letterSpacing: "0em", fontWeight: "800" }]
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Custom Game Styles -->
+  <link rel="stylesheet" href="./style.css" />
 </head>
-<body>
-    <div class="game-wrapper">
-        <!-- Fixed Header Section -->
-        <div class="fixed-header">
-            <h1>Pertandingan Sahibba</h1>
-            <div class="game-info">
-                <div class="score-display" id="score-display">Score: 0</div>
-                <div class="timer" id="timer">Time: 00:00</div>
-            </div>
-        </div>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col transition-colors duration-300">
 
-        <!-- Main Container -->
-        <div class="container">
-            <div class="game-area">
-                <!-- Name Input -->
-                <div class="name-input">
-                    <input type="text" id="name-input" placeholder="Masukkan Nama" autocomplete="off">
-                    <button id="name-button" class="wooden-button">Hantar</button>
-                </div>
-                
-                <!-- Game Controls -->
-                <div class="controls">
-                    <button id="start-button" class="wooden-button">Mula</button>
-                    <select id="time-select" class="wooden-select" aria-label="Select game duration">
-                        <option value="10">30 Saat</option>
-                        <option value="300">5 Minit</option>
-                        <option value="600">10 Minit</option>
-                        <option value="900">15 Minit</option>
-                        <option value="1200">20 Minit</option>
-                        <option value="1800">30 Minit</option>
-                        <option value="2100">35 Minit</option>
-                        <option value="2400">40 Minit</option>
-                        <option value="2700">45 Minit</option>
-                    </select>
-                    <button id="refresh-button" class="wooden-button">Refresh Letters (2x)</button>
-                </div>
-
-                <!-- Game Grid - Now 6x6 -->
-                <div class="grid" id="grid"></div>
-
-                <!-- Answer Box -->
-                <div class="answer-box">
-                    <div class="word-form-container">
-                        <div class="word-display" id="word-display"></div>
-                        <button id="chop-button" class="wooden-button chop-button">CHOP</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Side Panel -->
-            <div class="side-panel">
-                <!-- Joker Cards -->
-                <div class="joker-cards">
-                    <h2>Wildcards</h2>
-                    <div class="joker-grid" id="joker-grid"></div>
-                </div>
-
-                <!-- Leaderboard -->
-                <div class="leaderboard">
-                    <h2>Senarai Perkataan</h2>
-                    <ul id="word-list"></ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Theme Switcher -->
-        <div class="floating-sidebar">
-            <div class="sidebar-toggle">
-                <span class="toggle-icon">▶</span>
-            </div>
-            <div class="sidebar-content">
-                <a href="https://forms.gle/Ao3xLpSwCq6CSCm88" 
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="report-button">
-                  <span>Lapor Masalah</span>
-                  <svg class="icon" viewBox="0 0 24 24">
-                    <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 12H7v-2h10v2zm0-3H7v-2h10v2zm0-3H7V6h10v2z"/>
-                  </svg>
-                </a>
-                
-                <div class="theme-options">
-                    <h3>Game Theme</h3>
-                    <div class="theme-buttons">
-                        <button id="theme-wood" class="theme-button active" data-theme="wood">
-                            <div class="theme-preview wood-preview"></div>
-                            <span>Wood</span>
-                        </button>
-                        <button id="theme-forest" class="theme-button" data-theme="forest">
-                            <div class="theme-preview forest-preview"></div>
-                            <span>Forest</span>
-                        </button>
-                        <button id="theme-classic" class="theme-button" data-theme="classic">
-                            <div class="theme-preview classic-preview"></div>
-                            <span>Classic</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Game End Popup -->
-        <div id="game-end-popup" class="game-end-popup">
-            <div class="popup-content">
-                <div class="popup-header">
-                    <div class="ribbon">
-                        <span id="game-result">GAME OVER!</span>
-                    </div>
-                </div>
-                <div class="popup-body">
-                    <div class="score-item">
-                        <span class="score-label">YOUR SCORE:</span>
-                        <span id="final-score" class="score-value">0</span>
-                    </div>
-                </div>
-                <div class="popup-footer">
-                    <button id="play-again-btn" class="popup-btn play-btn">
-                        <span class="btn-text">OK</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Legal/Copyright Footer -->
-        <footer class="legal-footer">
-            <div class="copyright-container">
-                <p class="copyright-text">All design and code components of this website are © 2025 JACKIE WONG SING QIE. All rights reserved.</p>
-            </div>
-        </footer>
-    </div>
+  <!-- =========================================================================
+       VIEW 1: LOBBY & SETUP COCKPIT (from folder: login screen)
+       ========================================================================= -->
+  <div id="view-login" class="w-full min-h-screen flex flex-col justify-center items-center py-6 px-4 relative">
     
-    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-    <script src="./script.js"></script>
+    <!-- Ambient Floating Decorative Background Tiles & Glow -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden select-none -z-10">
+      <div class="absolute -top-20 -left-16 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-24 -right-16 w-96 h-96 bg-secondary-container/20 rounded-full blur-3xl"></div>
+      
+      <!-- Big Typography Ambient Letters -->
+      <span class="absolute top-[20%] left-[4%] font-display-hero text-8xl font-black text-primary/5 select-none -rotate-12 pointer-events-none">S</span>
+      <span class="absolute top-[65%] right-[5%] font-display-hero text-9xl font-black text-secondary/5 select-none rotate-12 pointer-events-none">A</span>
+      <span class="absolute top-[10%] right-[6%] font-display-hero text-7xl font-black text-tertiary/5 select-none rotate-6 pointer-events-none">H</span>
+
+      <!-- Floating Sahibba Tiles (Tactile Skeuomorphic 3D) -->
+      <div class="ambient-tile-1 absolute top-12 left-[10%] hidden lg:flex flex-col items-center justify-center w-14 h-14 bg-surface-container-lowest rounded-xl shadow-[0_8px_0_#bfc7d2,0_16px_20px_rgba(11,28,48,0.08)] transform hover:-translate-y-2 hover:rotate-[-6deg] transition-all duration-300 cursor-pointer pointer-events-auto">
+        <span class="font-tile-letter text-tile-letter text-on-surface leading-none select-none font-extrabold">S</span>
+        <span class="font-tile-score text-tile-score text-primary font-bold self-end mr-2 -mt-1 select-none">1</span>
+      </div>
+      <div class="ambient-tile-2 absolute top-28 right-[12%] hidden lg:flex flex-col items-center justify-center w-14 h-14 bg-surface-container-lowest rounded-xl shadow-[0_8px_0_#bfc7d2,0_16px_20px_rgba(11,28,48,0.08)] transform hover:-translate-y-2 hover:rotate-[14deg] transition-all duration-300 cursor-pointer pointer-events-auto">
+        <span class="font-tile-letter text-tile-letter text-on-surface leading-none select-none font-extrabold">A</span>
+        <span class="font-tile-score text-tile-score text-primary font-bold self-end mr-2 -mt-1 select-none">1</span>
+      </div>
+      <div class="ambient-tile-3 absolute bottom-28 left-[8%] hidden lg:flex flex-col items-center justify-center w-14 h-14 bg-surface-container-lowest rounded-xl shadow-[0_8px_0_#bfc7d2,0_16px_20px_rgba(11,28,48,0.08)] transform hover:-translate-y-2 hover:rotate-[20deg] transition-all duration-300 cursor-pointer pointer-events-auto">
+        <span class="font-tile-letter text-tile-letter text-on-surface leading-none select-none font-extrabold">H</span>
+        <span class="font-tile-score text-tile-score text-primary font-bold self-end mr-2 -mt-1 select-none">4</span>
+      </div>
+      <div class="ambient-tile-4 absolute bottom-20 right-[10%] hidden lg:flex flex-col items-center justify-center w-14 h-14 bg-surface-container-lowest rounded-xl shadow-[0_8px_0_#bfc7d2,0_16px_20px_rgba(11,28,48,0.08)] transform hover:-translate-y-2 hover:rotate-[-8deg] transition-all duration-300 cursor-pointer pointer-events-auto">
+        <span class="font-tile-letter text-tile-letter text-on-surface leading-none select-none font-extrabold">B</span>
+        <span class="font-tile-score text-tile-score text-primary font-bold self-end mr-2 -mt-1 select-none">3</span>
+      </div>
+    </div>
+
+    <!-- Top Navigation Strip -->
+    <header class="w-full max-w-4xl flex items-center justify-between pb-6 mb-2 entrance-stagger-1">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-md shadow-primary/25 hover:rotate-6 hover:scale-105 transition-all duration-200 cursor-pointer">
+          <span class="font-tile-letter text-tile-letter font-black leading-none">S</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-headline-md text-2xl text-on-surface tracking-tight font-extrabold">SAHIBBA</span>
+            <span class="bg-primary/10 text-primary font-label-caps text-xs px-2.5 py-0.5 rounded-full uppercase tracking-wider font-bold">Digital Arena</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container-lowest shadow-sm text-on-surface-variant font-label-md text-xs hover:shadow transition-shadow">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" id="serverStatusDot"></span>
+          <span id="serverStatusText">Kamus DBP Aktif (24,562 Kata)</span>
+        </div>
+        <button class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-primary font-label-md text-xs transition-all duration-200 active:scale-95 cursor-pointer shadow-sm hover:shadow" id="btnOpenRulesLobby" type="button">
+          <span class="material-symbols-outlined text-lg">menu_book</span>
+          <span class="hidden sm:inline">Panduan &amp; Skor</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Game Setup Glassmorphic Cockpit Card -->
+    <div class="w-full max-w-4xl bg-surface-container-lowest rounded-3xl shadow-[0_24px_48px_-12px_rgba(11,28,48,0.12)] overflow-hidden transition-all duration-300 entrance-stagger-2 border border-outline-variant/30">
+      
+      <!-- Card Top Banner / Hero Visual Anchor -->
+      <div class="relative bg-gradient-to-r from-primary via-primary-container to-secondary p-8 text-on-primary overflow-hidden">
+        <div class="absolute -right-8 -top-8 w-44 h-44 rounded-full bg-surface-container-lowest/10 blur-2xl pointer-events-none"></div>
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 relative z-10">
+          <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-lowest/20 backdrop-blur-md text-on-primary font-label-caps text-xs uppercase tracking-wider mb-3">
+              <span class="material-symbols-outlined text-sm">trophy</span>
+              <span>Bilik Perlawanan Bersedia</span>
+            </div>
+            <h1 class="font-display-hero text-2xl sm:text-4xl text-on-primary leading-tight font-extrabold mb-2">
+              Selamat Datang ke Arena!
+            </h1>
+            <p class="font-body-md text-sm sm:text-base text-surface-container-low max-w-xl">
+              Uji ketangkasan perbendaharaan kata Bahasa Melayu anda dalam perlawanan susun jubin masa nyata yang interaktif dan mencabar.
+            </p>
+          </div>
+
+          <!-- Decorative Interactive Tile Rack Badge -->
+          <div class="flex items-center gap-2 bg-on-primary/10 backdrop-blur-md p-3 rounded-2xl self-start md:self-auto shadow-inner border border-white/10" id="tileRackInteractive" title="Klik jubin untuk animasi!">
+            <div class="interactive-tile tile-floating-1 shimmer-effect w-11 h-12 rounded-xl bg-surface-container-lowest text-on-surface flex flex-col items-center justify-center shadow-md transform hover:-translate-y-2 hover:rotate-6 hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer select-none" data-letter="M" data-score="2">
+              <span class="font-tile-letter text-lg font-black leading-none">M</span>
+              <span class="font-tile-score text-[10px] text-primary font-bold self-end mr-1.5 -mt-0.5">2</span>
+            </div>
+            <div class="interactive-tile tile-floating-2 shimmer-effect w-11 h-12 rounded-xl bg-surface-container-lowest text-on-surface flex flex-col items-center justify-center shadow-md transform hover:-translate-y-2 hover:-rotate-6 hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer select-none" data-letter="A" data-score="1">
+              <span class="font-tile-letter text-lg font-black leading-none">A</span>
+              <span class="font-tile-score text-[10px] text-primary font-bold self-end mr-1.5 -mt-0.5">1</span>
+            </div>
+            <div class="interactive-tile tile-floating-3 shimmer-effect w-11 h-12 rounded-xl bg-surface-container-lowest text-on-surface flex flex-col items-center justify-center shadow-md transform hover:-translate-y-2 hover:rotate-6 hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer select-none" data-letter="I" data-score="1">
+              <span class="font-tile-letter text-lg font-black leading-none">I</span>
+              <span class="font-tile-score text-[10px] text-primary font-bold self-end mr-1.5 -mt-0.5">1</span>
+            </div>
+            <div class="interactive-tile tile-floating-4 shimmer-effect w-11 h-12 rounded-xl bg-surface-container-lowest text-on-surface flex flex-col items-center justify-center shadow-md transform hover:-translate-y-2 hover:-rotate-6 hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer select-none" data-letter="N" data-score="1">
+              <span class="font-tile-letter text-lg font-black leading-none">N</span>
+              <span class="font-tile-score text-[10px] text-primary font-bold self-end mr-1.5 -mt-0.5">1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Configuration Form Container -->
+      <div class="p-6 sm:p-10 flex flex-col gap-8 bg-surface-container-lowest">
+        
+        <!-- Section 1: Player Identity -->
+        <div>
+          <div class="flex items-center justify-between mb-2.5">
+            <label class="font-label-md text-sm font-semibold text-on-surface flex items-center gap-2" for="playerNameInput">
+              <span class="material-symbols-outlined text-primary text-lg">badge</span>
+              <span>Nama Pemain</span>
+            </label>
+            <button class="text-primary hover:text-primary-container font-label-md text-xs font-bold flex items-center gap-1.5 transition-all duration-200 cursor-pointer group active:scale-95" id="btnRandomizeName" type="button">
+              <span class="material-symbols-outlined text-base group-hover:rotate-180 transition-transform duration-500" id="randomizeIcon">casino</span>
+              <span>Jana Nama Rawak</span>
+            </button>
+          </div>
+          <div class="relative flex items-center">
+            <div class="absolute left-4 flex items-center pointer-events-none text-outline transition-colors">
+              <span class="material-symbols-outlined text-xl">person</span>
+            </div>
+            <input class="w-full bg-surface-container-low focus:bg-surface-container-lowest text-on-surface font-body-lg text-base pl-12 pr-4 py-3.5 rounded-2xl shadow-inner outline-none focus:ring-4 focus:ring-primary/20 focus:border-primary border border-transparent focus:shadow-md transition-all duration-200" id="playerNameInput" placeholder="Masukkan nama pemain..." type="text" value="" maxlength="20" autocomplete="off" />
+          </div>
+        </div>
+
+        <!-- Section 2: Game Mode Selector -->
+        <div>
+          <label class="font-label-md text-sm font-semibold text-on-surface flex items-center gap-2 mb-3">
+            <span class="material-symbols-outlined text-primary text-lg">sports_esports</span>
+            <span>Pilih Mod Permainan</span>
+          </label>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5" id="gameModeGroup">
+            
+            <!-- Card 1: Mod Biasa -->
+            <div class="mode-card group cursor-pointer rounded-2xl p-4 bg-surface-container-low hover:bg-surface-container-high hover:-translate-y-1 hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col justify-between border-2 border-transparent" data-mode="biasa">
+              <div class="flex items-start justify-between gap-3 mb-3">
+                <div class="mode-icon-box w-10 h-10 rounded-xl bg-surface-container-lowest flex items-center justify-center text-primary shadow-sm group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                  <span class="material-symbols-outlined text-2xl">timer</span>
+                </div>
+                <span class="mode-check material-symbols-outlined text-primary text-xl opacity-0 scale-75 group-hover:opacity-40 transition-all duration-200">check_circle</span>
+              </div>
+              <div>
+                <div class="font-headline-md text-base font-bold text-on-surface mb-1">Mod Biasa</div>
+                <p class="font-body-md text-xs text-on-surface-variant leading-relaxed">Main santai dengan skor asas mengikut jubin rasmi Sahibba.</p>
+              </div>
+              <div class="mt-4 pt-3 flex items-center justify-between text-outline text-[11px] font-label-caps border-t border-outline-variant/20">
+                <span>GAYA KLASIK</span>
+                <span>MARKAH TEPAT</span>
+              </div>
+            </div>
+
+            <!-- Card 2: Serangan Masa (Default Active) -->
+            <div class="mode-card group cursor-pointer rounded-2xl p-4 bg-surface-container text-on-surface shadow-lg ring-2 ring-primary hover:-translate-y-1 hover:shadow-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between border-2 border-primary/20" data-mode="serangan">
+              <div class="flex items-start justify-between gap-3 mb-3">
+                <div class="mode-icon-box w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow group-hover:scale-110 group-hover:-rotate-6 transition-all duration-300">
+                  <span class="material-symbols-outlined text-2xl animate-pulse">bolt</span>
+                </div>
+                <span class="mode-check material-symbols-outlined text-primary text-xl opacity-100 scale-100 transition-all duration-200">check_circle</span>
+              </div>
+              <div>
+                <div class="font-headline-md text-base font-bold text-on-surface mb-1">Serangan Masa</div>
+                <p class="font-body-md text-xs text-on-surface-variant leading-relaxed">Cepat &amp; mencabar! Bonus berturut gandaan x1.5 sehingga loceng tamat.</p>
+              </div>
+              <div class="mt-4 pt-3 flex items-center justify-between text-primary font-label-caps text-[11px] border-t border-primary/20">
+                <span class="bg-primary/10 px-2 py-0.5 rounded font-bold">POPULAR</span>
+                <span class="font-semibold">BONUS BERUNTUN</span>
+              </div>
+            </div>
+
+            <!-- Card 3: Cabaran Kamus -->
+            <div class="mode-card group cursor-pointer rounded-2xl p-4 bg-surface-container-low hover:bg-surface-container-high hover:-translate-y-1 hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col justify-between border-2 border-transparent" data-mode="kamus">
+              <div class="flex items-start justify-between gap-3 mb-3">
+                <div class="mode-icon-box w-10 h-10 rounded-xl bg-surface-container-lowest flex items-center justify-center text-tertiary shadow-sm group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                  <span class="material-symbols-outlined text-2xl">auto_stories</span>
+                </div>
+                <span class="mode-check material-symbols-outlined text-primary text-xl opacity-0 scale-75 group-hover:opacity-40 transition-all duration-200">check_circle</span>
+              </div>
+              <div>
+                <div class="font-headline-md text-base font-bold text-on-surface mb-1">Cabaran Kamus</div>
+                <p class="font-body-md text-xs text-on-surface-variant leading-relaxed">Perkataan panjang (6+ huruf) atau huruf langka dapat gandaan markah x2.0.</p>
+              </div>
+              <div class="mt-4 pt-3 flex items-center justify-between text-outline text-[11px] font-label-caps border-t border-outline-variant/20">
+                <span class="text-tertiary font-bold">BONUS x2.0</span>
+                <span>KOSA KATA LUAS</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Section 3: Game Parameters (Time Limit & Difficulty) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Sub-block A: Duration Selector -->
+          <div class="bg-surface-container-low p-5 rounded-2xl flex flex-col justify-between gap-3 transition-colors">
+            <div class="flex items-center justify-between">
+              <label class="font-label-md text-sm font-semibold text-on-surface flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-lg">schedule</span>
+                <span>Tempoh Perlawanan</span>
+              </label>
+              <span class="font-label-caps text-xs text-primary uppercase font-bold" id="selectedDurationLabel">5 Minit</span>
+            </div>
+            <div class="grid grid-cols-4 gap-2">
+              <button class="duration-btn py-2.5 px-2 rounded-xl font-label-md text-xs text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:scale-[1.02] active:scale-95 transition-all text-center cursor-pointer shadow-sm" data-time="180" type="button">
+                3 Minit
+                <span class="block text-[10px] text-outline font-normal">Pantas</span>
+              </button>
+              <button class="duration-btn active py-2.5 px-2 rounded-xl font-label-md text-xs text-on-primary bg-primary shadow-md hover:scale-[1.02] active:scale-95 transition-all text-center cursor-pointer" data-time="300" type="button">
+                5 Minit
+                <span class="block text-[10px] text-primary-fixed-dim font-normal">Standard</span>
+              </button>
+              <button class="duration-btn py-2.5 px-2 rounded-xl font-label-md text-xs text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:scale-[1.02] active:scale-95 transition-all text-center cursor-pointer shadow-sm" data-time="600" type="button">
+                10 Minit
+                <span class="block text-[10px] text-outline font-normal">Santai</span>
+              </button>
+              <button class="duration-btn py-2.5 px-2 rounded-xl font-label-md text-xs text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:scale-[1.02] active:scale-95 transition-all text-center cursor-pointer shadow-sm" data-time="900" type="button">
+                15 Minit
+                <span class="block text-[10px] text-outline font-normal">Maraton</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Sub-block B: Difficulty Level Selector -->
+          <div class="bg-surface-container-low p-5 rounded-2xl flex flex-col justify-between gap-3 transition-colors">
+            <div class="flex items-center justify-between">
+              <label class="font-label-md text-sm font-semibold text-on-surface flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-lg">tune</span>
+                <span>Tahap Kesukaran Kosa Kata</span>
+              </label>
+              <span class="font-label-caps text-xs text-primary uppercase font-bold" id="selectedDifficultyLabel">Sederhana</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <button class="diff-btn py-2.5 px-2 rounded-xl font-label-md text-xs text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:scale-[1.02] active:scale-95 transition-all text-center cursor-pointer shadow-sm" data-diff="mudah" type="button">
+                Mudah
+                <span class="block text-[10px] text-outline font-normal">Pemula</span>
+              </button>
+              <button class="diff-btn active py-2.5 px-2 rounded-xl font-label-md text-xs text-on-primary bg-primary shadow-md hover:scale-[1.02] active:scale-95 transition-all text-center cursor-pointer" data-diff="sederhana" type="button">
+                Sederhana
+                <span class="block text-[10px] text-primary-fixed-dim font-normal">Standard</span>
+              </button>
+              <button class="diff-btn py-2.5 px-2 rounded-xl font-label-md text-xs text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:scale-[1.02] active:scale-95 transition-all text-center cursor-pointer shadow-sm" data-diff="pakar" type="button">
+                Pakar
+                <span class="block text-[10px] text-outline font-normal">Dewan Bahasa</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Section 4: High Impact Primary Start Game CTA -->
+        <div class="pt-2">
+          <button class="cta-pulse group w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-primary via-primary-container to-secondary text-on-primary font-headline-md text-lg font-bold shadow-lg hover:shadow-xl hover:from-primary-container hover:to-primary active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-3 cursor-pointer" id="btnStartGame" type="button">
+            <span class="material-symbols-outlined text-2xl group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300">play_circle</span>
+            <span class="tracking-wide">Mula Permainan Sekarang</span>
+            <span class="material-symbols-outlined text-xl group-hover:translate-x-1.5 transition-transform duration-300">arrow_forward</span>
+          </button>
+        </div>
+
+        <!-- Bottom Reference Info Pill -->
+        <div class="flex flex-col sm:flex-row items-center justify-between pt-2 gap-2 text-on-surface-variant font-label-caps text-xs">
+          <div class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-base text-secondary">verified</span>
+            <span>Pangkalan data bersandarkan sistem rasmi Dewan Bahasa dan Pustaka (DBP)</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="hover:text-primary transition-colors underline cursor-pointer" id="btnQuickLeaderboard" type="button">Papan Markah</button>
+            <span>&bull;</span>
+            <button class="hover:text-primary transition-colors underline cursor-pointer" id="btnQuickDict" type="button">Semakan Kata DBP</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer Copyright -->
+    <footer class="mt-8 text-center text-outline font-label-caps text-xs entrance-stagger-3">
+      Semua reka bentuk dan komponen kod laman web ini adalah &copy; 2025 JACKIE WONG SING QIE. Hak cipta terpelihara.
+    </footer>
+  </div>
+
+
+  <!-- =========================================================================
+       VIEW 2: IN-GAME ARENA (from folder: stitch_sahibba_game_ui_redesign)
+       ========================================================================= -->
+  <div id="view-game" class="w-full min-h-screen flex flex-col hidden select-none">
+    
+    <!-- Arena Fixed Top Navigation Bar -->
+    <header class="sticky top-0 w-full z-40 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-outline-variant/20">
+      <div class="h-16 w-full px-4 sm:px-8 flex items-center justify-between gap-4">
+        
+        <!-- Left: Logo & Navigation Tabs -->
+        <div class="flex items-center gap-4 shrink-0">
+          <div class="flex items-center gap-2 cursor-pointer" id="navLogoLobby" title="Kembali ke Lobi">
+            <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm">
+              <span class="font-tile-letter text-lg font-black leading-none">S</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="font-headline-md text-xl tracking-tight text-primary font-bold hidden sm:inline">SAHIBBA</span>
+              <span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-caps text-[10px] font-bold uppercase">Klasik Moden</span>
+            </div>
+          </div>
+
+          <nav class="hidden xl:flex items-center gap-1 ml-4">
+            <button class="px-3.5 py-1.5 transition-all bg-primary text-on-primary font-label-md text-xs font-semibold rounded-lg shadow-sm" type="button">Arena Papan</button>
+            <button class="px-3.5 py-1.5 rounded-lg text-on-surface-variant font-label-md text-xs font-medium hover:bg-surface-container-high hover:text-on-surface transition-all" id="btnNavDict" type="button">Semakan Kata DBP</button>
+            <button class="px-3.5 py-1.5 rounded-lg text-on-surface-variant font-label-md text-xs font-medium hover:bg-surface-container-high hover:text-on-surface transition-all" id="btnNavScores" type="button">Papan Markah</button>
+          </nav>
+        </div>
+
+        <!-- Right: Theme Switcher, Audio, Fullscreen, Profile & Exit -->
+        <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+          
+          <!-- Theme Switcher Dropdown -->
+          <div class="flex items-center gap-1 bg-surface-container-low px-2.5 py-1.5 rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.02)] transition-transform hover:scale-[1.02]">
+            <span class="material-symbols-outlined text-[18px] text-secondary">palette</span>
+            <select class="bg-transparent font-label-md text-xs text-on-surface focus:outline-none cursor-pointer pr-1" id="themeSelect">
+              <option value="biru-moden">Biru Moden</option>
+              <option value="kayu-klasik">Papan Kayu Klasik</option>
+              <option value="mod-gelap">Mod Gelap</option>
+            </select>
+          </div>
+
+          <!-- Online Indicator -->
+          <div class="hidden md:flex items-center gap-2 bg-surface-container-lowest px-3 py-1.5 rounded-full shadow-[0_1px_4px_rgba(0,0,0,0.04)] border border-outline-variant/30">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            </span>
+            <span class="font-label-md text-xs text-on-surface font-medium" id="arenaConnectionText">Dalam Talian</span>
+          </div>
+
+          <!-- Utility Quick Buttons -->
+          <div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-xl">
+            <button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high hover:text-primary transition-all active:scale-90 cursor-pointer" id="btnAudioToggle" title="Muzik &amp; Bunyi" type="button">
+              <span class="material-symbols-outlined text-[20px]" id="audioIcon">volume_up</span>
+            </button>
+            <button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high hover:text-primary transition-all active:scale-90 cursor-pointer" id="btnOpenRulesArena" title="Panduan &amp; Nilai Jubin" type="button">
+              <span class="material-symbols-outlined text-[20px]">menu_book</span>
+            </button>
+            <button class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high hover:text-primary transition-all active:scale-90 cursor-pointer" id="btnFullscreen" title="Skrin Penuh" type="button">
+              <span class="material-symbols-outlined text-[20px]">fullscreen</span>
+            </button>
+          </div>
+
+          <!-- Player Profile & Back to Lobby -->
+          <div class="flex items-center gap-2 pl-1 border-l border-outline-variant/30">
+            <div class="hidden sm:flex flex-col text-right">
+              <div class="flex items-center justify-end gap-1.5">
+                <span class="font-label-md text-xs text-on-surface font-bold" id="headerPlayerName">Hang Tuah</span>
+                <span class="bg-tertiary-fixed text-on-tertiary-fixed font-label-caps text-[10px] px-1.5 py-0.2 rounded font-bold" id="headerPlayerBadge">JAGUH KATA</span>
+              </div>
+              <span class="font-label-caps text-[10px] text-on-surface-variant" id="headerModeBadge">Serangan Masa</span>
+            </div>
+            
+            <button class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary shadow-sm hover:scale-105 active:scale-95 transition-transform cursor-pointer" id="btnExitToLobby" title="Kembali ke Lobi / Tukar Tetapan" type="button">
+              <span class="material-symbols-outlined text-[18px]">logout</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Game Canvas Container -->
+    <main class="w-full flex-1 p-4 sm:p-6 lg:p-8 max-w-[1520px] mx-auto flex flex-col gap-6">
+      
+      <!-- Top HUD: Player Profile, Animated Circular Timer & Live Score Ribbon -->
+      <section class="w-full grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-surface-container-lowest/90 backdrop-blur-xl p-4 sm:p-5 rounded-3xl shadow-[0_4px_24px_rgba(0,97,148,0.06)] border border-outline-variant/20 relative overflow-hidden">
+        <div class="absolute -right-16 -top-16 w-64 h-64 bg-secondary-fixed/30 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-primary-fixed-dim/20 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <!-- Left (4 cols): Player Profile & Status Indicator -->
+        <div class="md:col-span-4 flex items-center gap-4 min-w-0">
+          <div class="relative flex-shrink-0">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary-container p-0.5 shadow-[0_4px_12px_rgba(0,97,148,0.25)] hover:scale-105 transition-transform">
+              <div class="w-full h-full bg-surface-container-lowest rounded-[14px] flex items-center justify-center">
+                <span class="font-headline-md text-xl text-primary font-extrabold" id="hudPlayerInitials">HT</span>
+              </div>
+            </div>
+            <span class="absolute -bottom-1 -right-1 flex h-4 w-4">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-container opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-4 w-4 bg-primary border-2 border-surface-container-lowest"></span>
+            </span>
+          </div>
+
+          <div class="flex flex-col min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="font-headline-md text-lg text-on-surface truncate font-bold" id="hudPlayerName">Hang Tuah</span>
+              <span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-caps text-[10px] font-bold uppercase tracking-wider" id="hudPlayerRank">Jaguh</span>
+            </div>
+            <div class="flex items-center gap-2 text-on-surface-variant font-label-md text-xs">
+              <span class="flex items-center gap-1.5 text-secondary font-bold relative">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+                </span>
+                <span class="material-symbols-outlined text-[15px]">swords</span> Giliran Anda
+              </span>
+              <span>&bull;</span>
+              <span class="text-on-surface-variant" id="hudRoundIndicator">Pusingan Ke-1</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center (4 cols): Circular Countdown Timer with SVG progress dial -->
+        <div class="md:col-span-4 flex items-center justify-center">
+          <div class="flex items-center gap-4 px-6 py-2 bg-surface-container-low/90 rounded-2xl shadow-inner border border-surface-container-high/40 hover:shadow-md transition-shadow">
+            <div class="relative w-12 h-12 flex items-center justify-center">
+              <svg class="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
+                <circle class="stroke-surface-container-highest" cx="24" cy="24" fill="none" r="20" stroke-width="4"></circle>
+                <circle class="stroke-primary transition-all duration-1000 ease-linear" cx="24" cy="24" fill="none" id="timerProgressRing" r="20" stroke-dasharray="125.66" stroke-dashoffset="0" stroke-linecap="round" stroke-width="4"></circle>
+              </svg>
+              <span class="material-symbols-outlined text-primary text-[20px] absolute animate-hourglass" id="hourglassIcon">hourglass_top</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="font-label-caps text-[10px] text-on-surface-variant tracking-wider uppercase font-bold">Masa Tersisa</span>
+              <div class="flex items-baseline gap-1">
+                <span class="font-timer-display text-2xl sm:text-3xl text-on-surface font-extrabold tracking-tight" id="countdownTimer">05:00</span>
+                <span class="font-label-caps text-xs text-secondary font-bold" id="timerUnitLabel">MIN</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right (4 cols): Live Score & Multiplier Streak -->
+        <div class="md:col-span-4 flex items-center justify-end gap-4">
+          <div class="flex flex-col items-end">
+            <div class="flex items-center gap-1.5">
+              <span class="px-2 py-0.5 rounded-full bg-secondary text-on-secondary font-label-caps text-[10px] font-bold" id="hudStreakBadge">
+                Standard
+              </span>
+              <span class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">Jumlah Markah</span>
+            </div>
+            <div class="flex items-baseline gap-1">
+              <span class="font-display-hero text-3xl sm:text-4xl text-primary font-black tracking-tight leading-none transition-transform" id="playerTotalScore">0</span>
+              <span class="font-label-md text-xs text-on-surface-variant font-bold">MATA</span>
+            </div>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-surface-container-high flex items-center justify-center text-primary shadow-sm hover:rotate-6 transition-transform" id="scoreBadgeIcon">
+            <span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Main Game Matrix Arena (2-Column Asymmetrical Grid) -->
+      <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Left Cockpit: Word Rack + 6x6 Board + Wildcards (8 cols) -->
+        <div class="lg:col-span-8 flex flex-col gap-5">
+          
+          <!-- Interactive Word Construction Deck (BINA PERKATAAN) -->
+          <div class="w-full bg-surface-container-lowest rounded-3xl p-5 sm:p-6 shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-outline-variant/20 relative" id="wordConstructionBox">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-xl">spellcheck</span>
+                <span class="font-label-caps text-xs text-on-surface-variant uppercase tracking-widest font-bold">Bina Perkataan</span>
+              </div>
+              
+              <!-- Word Score Estimator Tag -->
+              <div class="hidden items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container text-primary font-label-md text-xs font-bold transition-all shadow-sm" id="wordScoreBadge">
+                <span class="material-symbols-outlined text-[16px] text-secondary">stars</span>
+                <span>Nilai Kata: +<span class="font-extrabold text-sm" id="currentWordScore">0</span> mata</span>
+              </div>
+            </div>
+
+            <!-- Tactile Tile Placement Stage (The Word Tray) -->
+            <div class="min-h-[80px] w-full bg-surface-container-low/80 rounded-2xl p-3 flex items-center justify-center gap-2 sm:gap-3 shadow-inner relative overflow-x-auto border-2 border-dashed border-outline-variant/40 hover:border-primary/40 transition-colors" id="trayContainer">
+              <div class="flex items-center gap-2 text-on-surface-variant/70 font-body-md text-xs sm:text-sm italic select-none" id="trayPlaceholder">
+                <span class="material-symbols-outlined text-[20px] text-primary animate-bounce">touch_app</span>
+                <span>Pilih atau seret jubin huruf di bawah untuk membina perkataan...</span>
+              </div>
+              <div class="flex items-center gap-2 sm:gap-3 z-10 py-1" id="activeWordRack">
+                <!-- Dynamically populated selected tiles -->
+              </div>
+            </div>
+
+            <!-- Word Action Controls -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mt-4 pt-1">
+              <div class="flex items-center gap-2">
+                <button class="px-4 py-2.5 rounded-xl bg-surface-container-high text-on-surface-variant font-label-md text-xs font-bold hover:bg-surface-variant active:scale-95 transition-all flex items-center gap-1.5 shadow-[0_2px_0_#bfc7d2] cursor-pointer" id="btnClear" title="Padam huruf terakhir" type="button">
+                  <span class="material-symbols-outlined text-[18px]">backspace</span>
+                  <span>Padam</span>
+                </button>
+                <button class="px-4 py-2.5 rounded-xl bg-surface-container text-on-surface-variant font-label-md text-xs font-bold hover:bg-surface-container-high active:scale-95 transition-all cursor-pointer" id="btnCancel" type="button">
+                  Batal Semua
+                </button>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button class="shimmer-sweep-btn btn-ambient-pulse px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline-md text-xs font-bold hover:brightness-110 active:scale-95 shadow-[0_4px_12px_rgba(0,97,148,0.3),0_3px_0_#004b73] transition-all flex items-center gap-2 cursor-pointer" id="btnSubmitWord" type="button">
+                  <span class="material-symbols-outlined text-[18px]">send</span>
+                  <span>HANTAR JAWAPAN</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main 6x6 Letter Board Stage -->
+          <div class="w-full bg-surface-container-lowest rounded-3xl p-5 sm:p-6 shadow-[0_10px_32px_rgba(0,0,0,0.05)] border border-outline-variant/20 flex flex-col items-center relative overflow-hidden">
+            <!-- Ambient Board Gradient -->
+            <div class="absolute inset-0 bg-gradient-to-b from-surface-container-low/40 via-transparent to-surface-container-high/20 pointer-events-none"></div>
+            
+            <!-- Board HUD Header Bar -->
+            <div class="w-full flex items-center justify-between mb-4 z-10 px-1">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+                <span class="font-label-caps text-xs text-on-surface uppercase tracking-wider font-extrabold">Papan Jubin 6 &times; 6</span>
+                <span class="text-xs text-on-surface-variant font-medium hidden sm:inline">(Klik huruf untuk menyusun kata)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-on-surface-variant font-label-caps text-xs uppercase font-medium">Baki Jubin: <strong class="text-primary font-extrabold" id="remainingTilesCounter">36/36</strong></span>
+              </div>
+            </div>
+
+            <!-- 6x6 Tactile Neomorphic Tile Grid Canvas -->
+            <div class="p-3 sm:p-5 bg-surface-container rounded-2xl shadow-inner z-10 relative border border-outline-variant/20">
+              <div class="grid grid-cols-6 gap-2 sm:gap-3 md:gap-3.5 select-none" id="tileGrid">
+                <!-- 36 tactile tiles populated dynamically by script.js -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Jokers (Wildcard) Reserve Tray & Utilities -->
+          <div class="w-full bg-surface-container-lowest rounded-3xl p-4 sm:p-5 shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-outline-variant/20 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="flex flex-col">
+                <span class="font-label-caps text-xs text-tertiary uppercase tracking-wider font-extrabold flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[16px]">magic_button</span> JOKERS (WILDCARD)
+                </span>
+                <span class="text-xs text-on-surface-variant">Boleh menggantikan sebarang huruf</span>
+              </div>
+              
+              <!-- 3 Reserved Wildcard Tiles -->
+              <div class="flex items-center gap-2" id="wildcardReserveContainer">
+                <button class="tile-btn tile-interactive wildcard-interactive group relative w-11 h-11 bg-gradient-to-b from-[#faf5ff] to-[#f3e8ff] rounded-xl flex items-center justify-center shadow-[0_3px_0_#d8b4fe,0_4px_8px_rgba(107,56,212,0.15)] active:translate-y-0.5 cursor-pointer border border-[#f3e8ff]" data-id="wild1" data-letter="*" data-score="0" data-wildcard="true" title="Gunakan Joker Wildcard" type="button">
+                  <span class="font-tile-letter text-lg text-tertiary font-black leading-none group-hover:rotate-12 transition-transform">*</span>
+                </button>
+                <button class="tile-btn tile-interactive wildcard-interactive group relative w-11 h-11 bg-gradient-to-b from-[#faf5ff] to-[#f3e8ff] rounded-xl flex items-center justify-center shadow-[0_3px_0_#d8b4fe,0_4px_8px_rgba(107,56,212,0.15)] active:translate-y-0.5 cursor-pointer border border-[#f3e8ff]" data-id="wild2" data-letter="*" data-score="0" data-wildcard="true" title="Gunakan Joker Wildcard" type="button">
+                  <span class="font-tile-letter text-lg text-tertiary font-black leading-none group-hover:rotate-12 transition-transform">*</span>
+                </button>
+                <button class="tile-btn tile-interactive wildcard-interactive group relative w-11 h-11 bg-gradient-to-b from-[#faf5ff] to-[#f3e8ff] rounded-xl flex items-center justify-center shadow-[0_3px_0_#d8b4fe,0_4px_8px_rgba(107,56,212,0.15)] active:translate-y-0.5 cursor-pointer border border-[#f3e8ff]" data-id="wild3" data-letter="*" data-score="0" data-wildcard="true" title="Gunakan Joker Wildcard" type="button">
+                  <span class="font-tile-letter text-lg text-tertiary font-black leading-none group-hover:rotate-12 transition-transform">*</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Quick Tactical Utilities (Shuffle Board with 3 chances) -->
+            <div class="flex items-center gap-2">
+              <button class="px-3.5 py-2 rounded-xl bg-surface-container flex items-center gap-1.5 text-on-surface-variant hover:bg-surface-container-high hover:text-primary transition-all active:scale-95 font-label-md text-xs font-semibold cursor-pointer" id="btnShuffle" title="Rombak Papan (3 Peluang)" type="button">
+                <span class="material-symbols-outlined text-[18px]">cached</span>
+                <span>Rombak Papan</span>
+                <span id="shuffleCountBadge" class="ml-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-primary/10 text-primary">3/3</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Sidebar: Validated Word Registry, Dewan Lookup & Daily Quest (4 cols) -->
+        <aside class="lg:col-span-4 flex flex-col gap-5">
+          
+          <!-- Main Validated Words Panel -->
+          <div class="w-full bg-surface-container-lowest rounded-3xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.05)] border border-outline-variant/20 flex flex-col">
+            
+            <!-- Vibrant Header Banner -->
+            <div class="w-full bg-gradient-to-r from-primary to-primary-container p-4 text-on-primary flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-[20px]">format_list_bulleted</span>
+                <h2 class="font-headline-md text-base font-extrabold tracking-wide uppercase">Senarai Perkataan</h2>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full bg-surface-container-lowest/20 backdrop-blur-md text-on-primary font-label-caps text-[11px] font-bold" id="headerWordCountPill">
+                0 Kata Sah
+              </span>
+            </div>
+
+            <!-- Scrollable Stack for Validated Words -->
+            <div class="p-4 flex flex-col gap-2.5 max-h-[360px] overflow-y-auto" id="wordListContainer">
+              <!-- Empty state default -->
+              <div class="p-6 text-center text-on-surface-variant flex flex-col items-center justify-center gap-2" id="wordListEmptyState">
+                <span class="material-symbols-outlined text-3xl text-outline-variant">edit_note</span>
+                <p class="text-xs">Belum ada perkataan dibina lagi. Mulakan dengan menyusun huruf di papan!</p>
+              </div>
+            </div>
+
+            <!-- Summary Footer: Average Points & Match Rate -->
+            <div class="p-4 bg-surface-container-high/60 mt-auto flex items-center justify-between border-t border-outline-variant/20">
+              <div class="flex flex-col">
+                <span class="font-label-caps text-[10px] text-on-surface-variant uppercase font-bold">Purata Mata Sekata</span>
+                <span class="font-headline-md text-sm text-on-surface font-extrabold" id="averageScoreDisplay">0.0 Mata / Kata</span>
+              </div>
+              <div class="h-9 w-9 rounded-xl bg-surface-container-lowest flex items-center justify-center text-primary shadow-sm">
+                <span class="material-symbols-outlined text-[20px]">trending_up</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dictionary Micro-Lookup Card (Semakan Maksud Pantas) -->
+          <div class="w-full bg-surface-container-lowest rounded-3xl p-4 sm:p-5 shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-outline-variant/20 flex flex-col gap-3 transition-all duration-300">
+            <div class="flex items-center justify-between select-none">
+              <span class="font-label-caps text-xs text-on-surface font-extrabold uppercase tracking-wider flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-primary text-[18px]">menu_book</span>
+                Semakan Maksud Pantas
+              </span>
+              <span class="text-[11px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full" id="dictDbpBadge">Korpus DBP (80k+)</span>
+            </div>
+
+            <!-- Inline Micro-Search Input for Quick Dewan Lookup -->
+            <div class="flex flex-col gap-1.5">
+              <div class="relative flex items-center">
+                <input id="quickLookupInput" type="text" placeholder="Taip perkataan untuk semak maksud..." autocomplete="off" class="w-full text-xs pl-8 pr-8 py-2.5 bg-surface-container-low rounded-xl border border-outline-variant/30 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-on-surface font-medium placeholder:font-normal placeholder:text-on-surface-variant/70" />
+                <span class="material-symbols-outlined text-[16px] text-on-surface-variant absolute left-2.5 pointer-events-none">search</span>
+                <button id="quickLookupBtn" type="button" class="absolute right-2 text-primary hover:text-primary-container p-0.5 bg-transparent border-0 cursor-pointer flex items-center justify-center transition-transform hover:scale-110 active:scale-95" title="Cari Maksud Kamus Dewan">
+                  <span class="material-symbols-outlined text-[18px]">arrow_circle_right</span>
+                </button>
+              </div>
+              <!-- Dynamic word suggestions / closest matches chips -->
+              <div id="quickLookupSuggestions" class="hidden flex flex-wrap items-center gap-1.5 pt-0.5 text-[11px]">
+                <span class="text-[10px] text-on-surface-variant font-medium">Cadangan:</span>
+                <div id="quickSuggestionsList" class="flex flex-wrap gap-1"></div>
+              </div>
+            </div>
+
+            <div class="bg-surface-container-low p-3.5 rounded-2xl flex flex-col gap-2 transition-all">
+              <div class="flex items-center justify-between">
+                <span class="font-headline-md text-sm text-primary font-bold tracking-wide" id="dictWordTitle">SAHIBBA</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800" id="dictStatusBadge">Sah DBP</span>
+              </div>
+              <p class="font-body-md text-xs text-on-surface-variant leading-relaxed" id="dictBriefText">
+                Permainan susun kata Bahasa Melayu berasaskan jubin berhuruf untuk menguji kemahiran kosa kata dan strategi tatabahasa.
+              </p>
+              
+              <!-- Direct definition details (No lebih lanjut button) -->
+              <div class="pt-2 border-t border-surface-container text-xs text-on-surface-variant space-y-1.5" id="dictExpandedDetails">
+                <p id="dictExampleParagraph"><strong class="text-on-surface">Contoh:</strong> <span id="dictExampleText">"Murid-murid giat berlatih Sahibba menjelang karnival bahasa peringkat negeri."</span></p>
+                <p id="dictRootsParagraph"><strong class="text-on-surface">Pola Kata:</strong> <span id="dictRootsText">Kata Terbitan &amp; Morfologi Rasmi DBP.</span></p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-xs text-on-surface-variant pt-0.5">
+              <span class="flex items-center gap-1 text-[11px]">
+                <span class="material-symbols-outlined text-[14px] text-secondary">psychology</span>
+                <span id="dictSynonymText">Kamus Dewan Edisi Keempat (DBP)</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Daily Sahibba Quest Challenge Badge -->
+          <div class="w-full bg-gradient-to-br from-surface-container-lowest via-surface-container to-surface-container-high rounded-3xl p-4 shadow-sm border border-outline-variant/20 flex items-center gap-3.5 hover:shadow-md transition-shadow">
+            <div class="w-11 h-11 rounded-2xl bg-secondary-container/40 flex items-center justify-center text-secondary shrink-0 hover:rotate-12 transition-transform">
+              <span class="material-symbols-outlined text-[24px]">workspace_premium</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="font-label-md text-xs font-bold text-on-surface">Cabaran Harian Sahibba</span>
+              <span class="text-[11px] text-on-surface-variant" id="dailyChallengeText">Bina 2 perkataan dengan 6+ huruf untuk bonus +30 mata istimewa!</span>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+
+    </main>
+
+    <!-- In-Game Footer -->
+    <footer class="w-full bg-surface-container-low border-t border-outline-variant/20 py-4 mt-auto">
+      <div class="max-w-[1520px] mx-auto px-4 sm:px-8 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-on-surface-variant">
+        <div class="flex items-center gap-2">
+          <span class="font-headline-md font-bold text-primary">SAHIBBA</span>
+          <span>&mdash; Permainan Silang Kata Digital Bahasa Melayu</span>
+        </div>
+        <div>
+          &copy; 2025 Sahibba Klasik Moden. Hak Cipta Terpelihara Jackie Wong Sing Qie.
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+
+  <!-- =========================================================================
+       MODALS & DIALOGS
+       ========================================================================= -->
+
+  <!-- 1. Rules & Scoring Modal (Panduan Permainan) -->
+  <div class="fixed inset-0 bg-inverse-surface/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden" id="rulesModal">
+    <div class="w-full max-w-xl bg-surface-container-lowest rounded-3xl shadow-2xl overflow-hidden border border-outline-variant/20 animate-in fade-in zoom-in-95 duration-200">
+      <div class="p-5 bg-primary text-on-primary flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined">menu_book</span>
+          <h2 class="font-headline-md text-lg font-bold">Panduan Permainan &amp; Nilai Jubin</h2>
+        </div>
+        <button class="text-on-primary/80 hover:text-on-primary hover:rotate-90 transition-transform duration-200 cursor-pointer" id="btnCloseRules" type="button">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="p-6 max-h-[75vh] overflow-y-auto flex flex-col gap-5 text-on-surface text-xs">
+        <div>
+          <h3 class="font-label-md text-xs font-bold uppercase tracking-wide text-primary mb-2.5">Nilai Markah Huruf Sahibba Rasmi</h3>
+          <div class="grid grid-cols-4 sm:grid-cols-6 gap-2">
+            <div class="p-2.5 rounded-xl bg-surface-container-low text-center shadow-sm">
+              <span class="font-tile-letter text-sm font-bold block text-on-surface">A, E, I, N</span>
+              <span class="font-tile-score text-[10px] text-primary font-bold">1 Markah</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-surface-container-low text-center shadow-sm">
+              <span class="font-tile-letter text-sm font-bold block text-on-surface">U, T, R, S</span>
+              <span class="font-tile-score text-[10px] text-primary font-bold">1 Markah</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-surface-container-low text-center shadow-sm">
+              <span class="font-tile-letter text-sm font-bold block text-on-surface">K, M, L, D</span>
+              <span class="font-tile-score text-[10px] text-primary font-bold">2 Markah</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-surface-container-low text-center shadow-sm">
+              <span class="font-tile-letter text-sm font-bold block text-on-surface">B, G, P, H</span>
+              <span class="font-tile-score text-[10px] text-primary font-bold">3 Markah</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-surface-container-low text-center shadow-sm">
+              <span class="font-tile-letter text-sm font-bold block text-on-surface">J, Y, C</span>
+              <span class="font-tile-score text-[10px] text-primary font-bold">4 Markah</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-surface-container-low text-center shadow-sm">
+              <span class="font-tile-letter text-sm font-bold block text-on-surface">W, F, V</span>
+              <span class="font-tile-score text-[10px] text-primary font-bold">4 Markah</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-surface-container-low text-center shadow-sm">
+              <span class="font-tile-letter text-sm font-bold block text-on-surface">X, Z</span>
+              <span class="font-tile-score text-[10px] text-primary font-bold">8 / 10 Markah</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-surface-container-low text-center shadow-sm">
+              <span class="font-tile-letter text-sm font-bold block text-on-surface">Q</span>
+              <span class="font-tile-score text-[10px] text-primary font-bold">10 Markah</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-tertiary/10 text-center shadow-sm col-span-2">
+              <span class="font-tile-letter text-sm font-bold text-tertiary block">&star; Jubin Joker (*)</span>
+              <span class="font-tile-score text-[10px] text-tertiary font-bold">Ganti Sebarang Huruf</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-low p-4 rounded-2xl">
+          <h3 class="font-label-md text-xs font-bold text-on-surface mb-1.5">Peraturan Pengesahan Kamus Dewan (DBP)</h3>
+          <p class="font-body-md text-xs text-on-surface-variant leading-relaxed">
+            Semua perkataan sah mestilah terkandung dalam Kamus Dewan Edisi Terkini (mengandungi lebih 24,000 entri perkataan asas dan terbitan Bahasa Melayu). Kata nama khas, singkatan, serta kata asing yang belum disahkan tidak dibenarkan.
+          </p>
+        </div>
+
+        <div class="bg-surface-container-low p-4 rounded-2xl">
+          <h3 class="font-label-md text-xs font-bold text-on-surface mb-1.5">Panduan Penggunaan Jubin &amp; Rombak</h3>
+          <p class="font-body-md text-xs text-on-surface-variant leading-relaxed">
+            Klik atau seret huruf dari papan ke tray pembinaan kata. Gunakan butang <strong>Padam</strong> untuk menarik balik huruf terakhir, atau butang <strong>Rombak Papan</strong> untuk menjana set abjad baharu sepenuhnya (3 peluang setiap perlawanan).
+          </p>
+        </div>
+
+        <button class="w-full py-3 rounded-xl bg-primary text-on-primary font-label-md text-xs font-bold hover:bg-primary-container active:scale-95 transition-all cursor-pointer shadow-md" id="btnModalUnderstood" type="button">
+          Saya Faham, Bersedia Untuk Bermain
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 2. Dictionary Search Modal (Semakan Kata DBP) -->
+  <div class="fixed inset-0 bg-inverse-surface/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden" id="dictModal">
+    <div class="w-full max-w-xl bg-surface-container-lowest rounded-3xl shadow-2xl overflow-hidden border border-outline-variant/20 animate-in fade-in zoom-in-95 duration-200">
+      <div class="p-5 bg-gradient-to-r from-primary to-secondary text-on-primary flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined">search</span>
+          <h2 class="font-headline-md text-lg font-bold">Semakan Kata Kamus Dewan DBP</h2>
+        </div>
+        <button class="text-on-primary/80 hover:text-on-primary hover:rotate-90 transition-transform duration-200 cursor-pointer" id="btnCloseDictModal" type="button">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="p-6 flex flex-col gap-4 text-on-surface">
+        <div class="flex items-center gap-2">
+          <div class="relative flex-1">
+            <span class="material-symbols-outlined absolute left-3 top-3 text-outline text-lg">menu_book</span>
+            <input class="w-full bg-surface-container-low text-on-surface pl-10 pr-4 py-2.5 rounded-xl border border-transparent focus:border-primary focus:bg-surface-container-lowest outline-none text-sm font-body-md transition-all" id="dictSearchInput" placeholder="Masukkan perkataan (cth. pendekar, sahabat, cerdik)..." type="text" />
+          </div>
+          <button class="px-5 py-2.5 rounded-xl bg-primary text-on-primary font-label-md text-xs font-bold hover:bg-primary-container active:scale-95 transition-all cursor-pointer shadow" id="btnDoSearchWord" type="button">
+            Semak
+          </button>
+        </div>
+
+        <!-- Search Result Box -->
+        <div class="p-4 rounded-2xl bg-surface-container-low min-h-[140px] flex flex-col justify-center items-center text-center text-xs" id="dictSearchResultBox">
+          <span class="material-symbols-outlined text-3xl text-outline mb-1">manage_search</span>
+          <p class="text-on-surface-variant">Taip sebarang perkataan untuk menyemak sama ada ia sah dalam perlawanan Sahibba.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 3. Leaderboard Modal (Papan Markah & Rekod) -->
+  <div class="fixed inset-0 bg-inverse-surface/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden" id="leaderboardModal">
+    <div class="w-full max-w-xl bg-surface-container-lowest rounded-3xl shadow-2xl overflow-hidden border border-outline-variant/20 animate-in fade-in zoom-in-95 duration-200">
+      <div class="p-5 bg-primary text-on-primary flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined">leaderboard</span>
+          <h2 class="font-headline-md text-lg font-bold">Papan Markah Jaguh Sahibba</h2>
+        </div>
+        <button class="text-on-primary/80 hover:text-on-primary hover:rotate-90 transition-transform duration-200 cursor-pointer" id="btnCloseLeaderboard" type="button">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="p-6 flex flex-col gap-4 text-on-surface">
+        <div class="flex items-center justify-between text-xs text-on-surface-variant border-b border-outline-variant/20 pb-2">
+          <span>Kedudukan Jaguh</span>
+          <span>Markah Tertinggi</span>
+        </div>
+        <div class="flex flex-col gap-2 max-h-[350px] overflow-y-auto" id="leaderboardList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 4. Match End Popup Modal (Tamat Permainan) -->
+  <div class="fixed inset-0 bg-inverse-surface/60 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden" id="gameEndPopup">
+    <div class="w-full max-w-md bg-surface-container-lowest rounded-3xl shadow-2xl overflow-hidden border border-outline-variant/20 animate-in zoom-in-95 duration-300 text-center">
+      
+      <!-- Top Trophy Banner -->
+      <div class="bg-gradient-to-b from-primary via-primary-container to-secondary p-8 text-on-primary relative">
+        <div class="w-20 h-20 mx-auto rounded-3xl bg-surface-container-lowest text-primary flex items-center justify-center shadow-xl mb-3 animate-bounce">
+          <span class="material-symbols-outlined text-5xl" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+        </div>
+        <h2 class="font-display-hero text-2xl font-black tracking-tight" id="gameResultTitle">MASA TAMAT!</h2>
+        <p class="text-xs text-surface-container-low mt-1 font-body-md" id="gameEndSubtitle">Perlawanan tamat. Prestasi anda telah direkodkan!</p>
+      </div>
+
+      <div class="p-6 flex flex-col gap-4 text-on-surface">
+        
+        <!-- Score Highlights -->
+        <div class="grid grid-cols-2 gap-3">
+          <div class="p-3.5 rounded-2xl bg-surface-container-low flex flex-col items-center">
+            <span class="font-label-caps text-[10px] text-on-surface-variant uppercase font-bold">JUMLAH MARKAH</span>
+            <span class="font-display-hero text-3xl font-black text-primary" id="endFinalScore">0</span>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-surface-container-low flex flex-col items-center">
+            <span class="font-label-caps text-[10px] text-on-surface-variant uppercase font-bold">KATA SAH DIBINA</span>
+            <span class="font-display-hero text-3xl font-black text-secondary" id="endFinalWordCount">0</span>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-surface-container-low flex items-center justify-between text-xs">
+          <span class="text-on-surface-variant font-medium">Gelaran Diperoleh:</span>
+          <span class="font-bold text-tertiary bg-tertiary/10 px-2.5 py-1 rounded-full" id="endPlayerTitle">Pendekar Kata</span>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-surface-container-low flex items-center justify-between text-xs">
+          <span class="text-on-surface-variant font-medium">Kata Tertinggi:</span>
+          <span class="font-bold text-primary" id="endBestWord">-</span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-2 gap-3 pt-2">
+          <button class="py-3 px-4 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-xs font-bold active:scale-95 transition-all cursor-pointer" id="btnEndBackToLobby" type="button">
+            Kembali ke Lobi
+          </button>
+          <button class="py-3 px-4 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-md text-xs font-bold shadow-md hover:shadow-lg active:scale-95 transition-all cursor-pointer" id="btnEndPlayAgain" type="button">
+            Main Semula
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Notification Toast Element -->
+  <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-2.5 bg-inverse-surface text-inverse-on-surface px-6 py-3 rounded-full shadow-2xl" id="gameToast">
+    <span class="material-symbols-outlined text-secondary-container text-xl" id="toastIcon">check_circle</span>
+    <span class="font-label-md text-xs font-bold tracking-wide" id="toastMessage">Perkataan Berjaya Dihantar!</span>
+  </div>
+
+  <!-- Confetti Container -->
+  <div class="fixed inset-0 pointer-events-none z-[60] overflow-hidden" id="confettiContainer"></div>
+
+  <!-- Main Game Engine Logic -->
+  <script src="./script.js?v=4.4"></script>
 </body>
 </html>
